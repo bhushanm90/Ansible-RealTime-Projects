@@ -1,5 +1,6 @@
 - name: Creating prometheus user group
-  group: name="{{groupId}}"
+  group:
+    name: "{{groupId}}"
   become: true
 
 - name: Creating prometheus user
@@ -12,9 +13,14 @@
     createhome: "no"
     state: present
 
+- name: Download prometheus 
+  uri: 
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{ version }}/prometheus-{{ version }}.linux-amd64.tar.gz"
+    dest: /tmp 
+
 - name: Install prometheus
   unarchive:
-    src: "https://github.com/prometheus/prometheus/releases/download/v{{ version }}/prometheus-{{ version }}.linux-amd64.tar.gz"
+    src: "/tmp/prometheus-{{ version }}.linux-amd64.tar.gz"
     dest: /tmp/
     remote_src: yes
 
